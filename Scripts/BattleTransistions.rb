@@ -1,6 +1,6 @@
 =begin
   Different Battle Transitions for VX Ace
-  version 2
+  version 3
   
   By: Modrome
   
@@ -42,14 +42,21 @@ module Battle_Transitions
     if (TRANSITION_VAR.nil?)
       return "Graphics/System/BattleStarts/BattleStart_"+ TRANSITION_FILES[0][0]
     end
-    return "Graphics/System/BattleStarts/BattleStart_" + TRANSITION_FILES[$game_variables[TRANSITION_VAR][0]]
+    return "Graphics/System/BattleStarts/BattleStart_" + TRANSITION_FILES[$game_variables[TRANSITION_VAR]][0]
+  end
+  
+  def self.Get_Transition_Speed
+    if (TRANSITION_VAR.nil?)
+      return TRANSITION_FILES[0][1]
+    end
+    return TRANSITION_FILES[$game_variables[TRANSITION_VAR]][1]
   end
 end
 
 
 class Scene_Map < Scene_Base
   def perform_battle_transition
-    Graphics.transition(Battle_Transitions.TRANSITION_FILES[$game_variables[TRANSITION_VAR]][1], Battle_Transitions.Get_Transition , 100)
+    Graphics.transition(Battle_Transitions.Get_Transition_Speed, Battle_Transitions.Get_Transition , 100)
     Graphics.freeze
   end
 end
