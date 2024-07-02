@@ -30,10 +30,6 @@
              
              Equipments without names are skipped, so if you 
              want to be able to test them, name them!
-             
-       TODO: Make a version that uses the Passive Weapons script
-       	     found in OM4, Passive Weapons will be excluded along
-       	     with unnamed equipments.
             
   COPYRIGHT: Apache License 2.0 
 =end
