@@ -1,6 +1,6 @@
 =begin
   Peril Status for VX Ace (MP Edition)
-  version 0
+  version 2
   
   By: Modrome
   
@@ -22,6 +22,13 @@
     Using both scripts will incur a 
     Stack Level Too Deep error.
 
+    VERSION 2:
+
+    Allows HP/MP peril state to be
+    configurable, allowing you to
+    have peril threasholds outside
+    of the traditional 25% 
+
             
   COPYRIGHT: Apache License 2.0 
 =end
@@ -29,11 +36,12 @@
 # CONFIGURATION START
 module Peril
   PERILSTATEID = 29 # Change this to the ID of the status effect.
+  HPPERILTHRESHHOLD = 0.25 # default: 25%
 end
 
 module MPPeril
   MPPERILSTATEID = 80 # Change this to the ID of the status effect.
-  MPPERILTHRESHHOLD = 50 # default: 25%
+  MPPERILTHRESHHOLD = 0.25 # default: 25%
   
   MPPERILCLASSES=[8,] # Add numbers (with comma separators) 
                       # to include more classes
@@ -50,7 +58,7 @@ class Game_Actor
 
     # MP PERIL
     if MPPeril::MPPERILCLASSES.include?(class_id)
-        if mp_rate < (0.25)
+        if mp_rate < (MPPeril::MPPERILTHRESHHOLD)
         add_state(MPPeril::MPPERILSTATEID) unless state?(MPPeril::MPPERILSTATEID)
       else
         erase_state(MPPeril::MPPERILSTATEID) if state?(MPPeril::MPPERILSTATEID)
@@ -58,7 +66,7 @@ class Game_Actor
     end
 
     # HP PERIL
-    if hp_rate < (0.25)
+    if hp_rate < (peril::HPPERILTHRESHHOLD)
       add_state(Peril::PERILSTATEID) unless state?(Peril::PERILSTATEID)
     else
       erase_state(Peril::PERILSTATEID) if state?(Peril::PERILSTATEID)
