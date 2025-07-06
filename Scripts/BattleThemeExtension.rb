@@ -24,9 +24,8 @@
               
               To activate, call this:
               $game_system.actorbt = true
-              to activate this, or 
+              To deactivate, call this:
               $game_system.actorbt = false
-              to deactivate this.
               
               
               Additional: you can change the BGM that the game plays
