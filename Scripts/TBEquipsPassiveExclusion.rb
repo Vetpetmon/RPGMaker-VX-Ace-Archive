@@ -1,6 +1,6 @@
 =begin
   Equipments added to Test Battle [PATCH]
-  version 2
+  version 3
   
   By: Modrome
   
@@ -13,6 +13,11 @@
              add in the equipment manually using common
              events, which gets tedious (and very loud if
              you're using an item obtained notification script)
+
+             This assumes you have a script to change 
+             equipments mid-battle, which is NOT a provided
+             behavior in VX Ace. You will need another script
+             for that functionality.
            
    Solution: This script patches the setup_battle_test_items
              function in the Game_Party class to now include
@@ -28,12 +33,25 @@
    Instructions:
              There are no configuration options, just put this 
              anywhere in your list between main and materials
+
+             In the game database, mark all functional weapons
+             and armor with <Gear> (default). You can change 
+             this value to whatever is necessary.
+
+             IF THE ITEM DOES NOT CONTAIN THE TAG, IT WILL
+             NOT APPEAR IN THE TEST BATTLE INVENTORY!
              
              Equipments without names are skipped, so if you 
              want to be able to test them, name them!
 
-             Version 2: Change <Gear> at Line 60 & 69 to 
+             Version 3: Change "Gear" at Line 60 to 
              whatever tag you are using for non-passive gear.
+
+
+     Update: Version 3 - Now moves the note lookup value
+             to a singular variable in the EquipsInTestBattle
+             module; only one line needs to be edited.
+             Instructions from version 2 are to be disregarded.
 
      Update: Version 2 - Looks for weapons with the <Gear> tag. 
              If the <Gear> tag is not found, it will not be added.
@@ -46,6 +64,18 @@
   COPYRIGHT: Apache License 2.0 
 =end
 
+# START CONFIGURATION
+=end
+
+module EquipsInTestBattle
+  
+  # If you wish to use a different tag word, change this value
+  tag = "Gear"
+  
+end
+
+# END CONFIGURATION
+
 class Game_Party < Game_Unit
 #--------------------------------------------------------------------------
 # Patch: setup_battle_test_items
@@ -57,7 +87,7 @@ class Game_Party < Game_Unit
     # WEAPONS
     $data_weapons.each do |weapon|
       if weapon && !weapon.name.empty?
-        if weapon.note =~ /<Gear>/ # Edit <Gear> to be the tag you're using
+        if weapon.note =~ /<#{EquipsInTestBattle::tag}>/
           gain_item(weapon, max_item_number(weapon)) 
         end
       end
@@ -66,7 +96,7 @@ class Game_Party < Game_Unit
     # ARMORS
     $data_armors.each do |armor|
       if armor && !armor.name.empty?
-        if armor.note =~ /<Gear>/ # Edit <Gear> to be the tag you're using
+        if armor.note =~ /<#{EquipsInTestBattle::tag}>/
           gain_item(armor, max_item_number(armor)) 
         end
       end
